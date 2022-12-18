@@ -12,25 +12,26 @@ bot = new TelegramBot(token, {
   polling: true
 });
 
-
+/*
 // Matches "/link-telegram"
 bot.onText(/\/link_wallet/, (msg, match) => {
   bot.sendMessage(msg.chat.id, `<b>Please enter a phone number </b>`, {parse_mode: 'HTML'});
 });
+*/
 
 // Matches "/link-telegram {text}"
 bot.onText(/\/link_wallet (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const data = match[1];
 
-  //console.log(`${process.env.WALLET_API_URL}/link-telegram/?phone=${data}&telegram_token=${msg.from.id}&api_token=${process.env.SECRET_KEY}`)
+  console.log(`${process.env.WALLET_API_URL}/link-telegram/?phone=${data}&telegram_token=${msg.from.id}&api_token=${process.env.SECRET_KEY}`)
 
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open( "GET", `${process.env.WALLET_API_URL}/link-telegram/?phone=${data}&telegram_token=${msg.from.id}&api_token=${process.env.SECRET_KEY}`, false ); // false for synchronous request
   xmlHttp.send( null );
   const jsonResponse = JSON.parse(xmlHttp.responseText)
 
-  //console.log(jsonResponse.response.status)
+  console.log(jsonResponse)
 
   if (jsonResponse.response.status === "Success") {
     bot.sendMessage(chatId, `<b>Successfully linked telegram to the wallet </b>`, {parse_mode: 'HTML'});
@@ -58,22 +59,27 @@ bot.onText(/\/link_wallet (.+)/, (msg, match) => {
    */
 });
 
+/*
 // Matches "/deposit"
 bot.onText(/\/deposit/, (msg, match) => {
   bot.sendMessage(msg.chat.id, `<b>Please an amount for deposit </b>`, {parse_mode: 'HTML'});
 });
+
+*/
 
 // Matches "/deposit {text}"
 bot.onText(/\/deposit (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const data = match[1];
 
+  console.log(msg.from.id)
+
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.open( "GET", `${process.env.WALLET_API_URL}/deposit/?amount=${data}&telegram_token=${msg.from.id}&api_token=${process.env.SECRET_KEY}`, false ); // false for synchronous request
   xmlHttp.send( null );
   const jsonResponse = JSON.parse(xmlHttp.responseText)
 
-  //console.log(xmlHttp.responseText)
+  console.log(jsonResponse)
 
   if (jsonResponse.status === "success") {
     bot.sendMessage(chatId, `<b>${jsonResponse.response.link}</b>`, {parse_mode: 'HTML'});
@@ -82,11 +88,12 @@ bot.onText(/\/deposit (.+)/, (msg, match) => {
   }
 });
 
+/*
 // Matches "/withdraw"
-bot.onText(/\/withdraw/, (msg, match) => {
-  bot.sendMessage(msg.chat.id, `<b>Please an amount for deposit </b>`, {parse_mode: 'HTML'});
+bot.onText(/\/withdraw/, (msg1, _) => {
+  bot.sendMessage(msg1.chat.id, `<b>Please an amount for deposit </b>`, {parse_mode: 'HTML'});
 });
-
+*/
 // Matches "/withdraw {text}"
 bot.onText(/\/withdraw (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
